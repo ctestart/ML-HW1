@@ -43,10 +43,8 @@ def regressValidateData():
 def designMatrix(X, order):
     n = len(X)
     phi = np.empty([n, order])
-    XX = X.reshape(10)
+    XX = np.asarray(X).reshape(n)
     for i in xrange(order):
-        #print phi
-        #print X ** i 
         phi[:,i] = XX ** i
     return phi
 
@@ -54,8 +52,7 @@ def regressionFit(X, Y, phi):
     """ Compute the weight vector """
     """ w_ML = (phiT phi)^-1 phiT """
     phiT = phi.transpose()
-    print phiT * phi
-    return (phiT* phi).getI() * phiT * Y
+    return (np.matrix(phiT)* np.matrix(phi)).getI() * np.matrix(phiT) * Y
 
 if __name__ == '__main__':
     [X,Y] = getData('curvefitting.txt')
