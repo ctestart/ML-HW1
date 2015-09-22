@@ -22,6 +22,7 @@ def regressionPlot(X, Y, order):
     pts = [[p] for p in pl.linspace(min(X), max(X), 100)]
     Yp = pl.dot(w.T, designMatrix(pts, order).T)
     pl.plot(pts, Yp.tolist()[0])
+    pl.show()
 
 def getData(name):
     data = pl.loadtxt(name)
@@ -56,6 +57,6 @@ def regressionFit(X, Y, phi):
 
 if __name__ == '__main__':
     [X,Y] = getData('curvefitting.txt')
-    regressionPlot(X, Y, 2)
+    regressionPlot(X, Y, 3)
 
 
