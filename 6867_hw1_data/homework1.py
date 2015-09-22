@@ -43,9 +43,9 @@ def regressValidateData():
 
 def designMatrix(X, order):
     n = len(X)
-    phi = np.empty([n, order])
+    phi = np.empty([n, (order+1)])
     XX = np.asarray(X).reshape(n)
-    for i in xrange(order):
+    for i in xrange(order+1):
         phi[:,i] = XX ** i
     return phi
 
@@ -57,6 +57,6 @@ def regressionFit(X, Y, phi):
 
 if __name__ == '__main__':
     [X,Y] = getData('curvefitting.txt')
-    regressionPlot(X, Y, 3)
+    regressionPlot(X, Y, 1)
 
 
