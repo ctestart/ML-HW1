@@ -55,8 +55,22 @@ def regressionFit(X, Y, phi):
     phiT = phi.transpose()
     return (np.matrix(phiT)* np.matrix(phi)).getI() * np.matrix(phiT) * Y
 
+def computeSEE(X,Y,weights,order):
+    """Compute the Sum of Square Error function given a dataset (X,Y), a weight vector and the order of the polynomial basis functions"""
+    phi=designMatrix(X,order)
+    SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
+    return SSE
+
 if __name__ == '__main__':
     [X,Y] = getData('curvefitting.txt')
-    regressionPlot(X, Y, 1)
+    regressionPlot(X, Y, 9)
+    Phi_matrix=designMatrix(X,9)
+    print (Phi_matrix)
+    weight_vector=regressionFit(X,Y,Phi_matrix)
+    print (weight_vector)
+    SSE=computeSEE(X,Y,weight_vector,9)
+    print ('Sum of Square Error')
+    print (SSE)
+
 
 
