@@ -61,6 +61,12 @@ def computeSEE(X,Y,weights,order):
     SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
     return SSE
 
+def computeSEEGrad(X,Y, weights, order):
+    """Compute the gradient of the SEE function given a dataset (X,Y), the weight vector and the order of the polynomial base functions"""
+    phi=designMatrix(X,order)
+    SEEGrad= (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
+    return SEEGrad
+
 if __name__ == '__main__':
     [X,Y] = getData('curvefitting.txt')
     regressionPlot(X, Y, 9)
@@ -71,6 +77,9 @@ if __name__ == '__main__':
     SSE=computeSEE(X,Y,weight_vector,9)
     print ('Sum of Square Error')
     print (SSE)
+    print ('Gradient of SSE')
+    SSEG=computeSEEGrad(X,Y,weight_vector,9)
+    print (SSEG)
 
 
 
