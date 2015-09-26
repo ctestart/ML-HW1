@@ -3,6 +3,9 @@ import random
 import pylab as pl
 from scipy.optimize import fmin_bfgs
 import numpy as np
+import unittest
+import homework1
+import gradDesc 
 
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
@@ -66,6 +69,9 @@ def computeSEEGrad(X,Y, weights, order):
     phi=designMatrix(X,order)
     SEEGrad= (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
     return SEEGrad
+
+def ridge_regression():
+    return 0 
 
 if __name__ == '__main__':
     [X,Y] = getData('curvefitting.txt')
