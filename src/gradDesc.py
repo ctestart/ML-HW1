@@ -1,6 +1,6 @@
 import numpy as np
 
-class gradDes():
+class gradDesc():
 	def __init__(self, x0, step_size, eps, verbose=False):
 		""" Specify the initial guess, the step size and the convergence criterion"""
 		""" Verbose prints debug messages for checking functions and things """
@@ -52,7 +52,7 @@ def conv_criteria(current, previous, eps):
 
 if __name__ == '__main__':
 	x = np.array([1,2])
-	des_obj = gradDes(x, .2, .00001)
+	des_obj = gradDes(x, .2, .00001, True)
 	answer = des_obj.grad_descent()
 	print "Found root at ", answer
     
