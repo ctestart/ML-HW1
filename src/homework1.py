@@ -58,6 +58,7 @@ def designMatrix(X, order):
 def regressionFit(X, Y, phi):
     """ Compute the weight vector """
     """ w_ML = (phiT phi)^-1 phiT """
+    """ NEED TO TEST """
     phiT = phi.transpose()
     return (np.matrix(phiT)* np.matrix(phi)).getI() * np.matrix(phiT) * Y
 
@@ -66,6 +67,7 @@ def computeSEE(X,Y,weights,order):
     """a weight vector and the order of the polynomial basis functions"""
     phi=designMatrix(X,order)
     SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
+    #SEE_with_dot = (0.5)*np.sum(np.square(Y-((weights.T.dot(phi)))))
     return SSE
 
 def computeSEEGrad(X,Y, weights, order):
@@ -73,6 +75,7 @@ def computeSEEGrad(X,Y, weights, order):
     """ the weight vector and the order of the polynomial base functions """
     phi=designMatrix(X,order)
     SEEGrad = (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
+    SEEGrad_with_dot = ((weights.T).dot(phi.T) - (Y.T)).dot(phi)
     return SEEGrad
 
 def ridge_regression(phi_matrix, l, Y):

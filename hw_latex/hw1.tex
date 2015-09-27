@@ -53,13 +53,22 @@
 
 %\vskip 0.3in
 ]
+%\abstract{The following paper outlines our approach to }
 
 \section{Implement Gradient Descent}
+Our gradient descent code is written in python and takes as parameters the initial guess, $x_0$, the step size, $\gamma$, and the convergence threshold, $\epsilon$.  The convergence criteria that we use to terminate is when the difference between successive ``guesses'' (call these $x_n$ and $x_{n+1}$ for some arbitrary $n$) is less than $\epsilon$, i.e. $|x_{n+1} -x_n | < \epsilon$.  Since we are only working with scalar functions, this will suffice.  If we were working with vector values functions, we could instead use the two-norm.  
 
-\subsection{Code}
+In order to test our gradient descent, we experimented with a few different functions.  We used a quadratic function: $f(X) = \sum_{i=1}^n x_i^2$, the Rosenbrock function: $f(x_1,x_2) = (1-x_1)^2+100(x_2-x_1^2)^2$ (as referenced in the Wikipedia page for gradient descent), and a few non convex functions to test gradient descent with multiple minima.  
+
+The choice of starting guess, $x_0$, the step size, $\gamma$ and the convergence threshold are very import to yield the ``correct'' solution.  In order to be confident that the algorithm has reached a solution, it's important to pick a small $\epsilon$.  For most of our testing, we used $\epsilon = 10^{-6}$.  However, picking too small of an epsilon can be computationally expensive: causing the algorithm to perform many more iterations that necessary to produce a ``confident'' solution.  The choice of starting guess, $x_0$ is also interesting.  In order to guarantee convergence, one needs to pick an $x_0$ relatively close to the true solution.  (In the case of more than one minima, the algorithm will converge to the minima closest to the starting point).  We found that However, we found the most important criteria was the $\gamma$ parameter.  We usually started with $\gamma=1$ and decreased it's value until we found a good fit.  If $\gamma$ is to large, the algorithm could miss the minima by jumping back and forth between the same points.  If $\gamma$ is too small, the algorithm may not converge as quickly...Mention numerical errors.  
+
+We also wrote code to approximate the gradient of a function numerically using central differences.  We verified its behavior by comparing the analytical and numerical gradients in a testing suite.  We used the python unittest framework and the assertAlmostEquals function to guarantee that all approximations were within 7 digits of accuracy.  We tested the gradient on the same functions we used to test our gradient descent, and also a few common polynomial functions. 
+
+
 
 \section{Linear Basis Function Regression}
 
+(2.4) In this instance, we used a polynomial basis function.  If instead the basis functions were sine functions, $\phi_1(x)=\sin(2\pi x),...,\phi_M(x)=\sin(2\pi Mx)$ we would expect that these basis functions would insure an even better fit for the data.  In fact, testing this on our data set, we found that the SEE was much smaller (insert example).  However, the sine basis functions are not always a good fit.  If we did not know that the data was generated from $\sin(2\pi x)$, using an oscillating basis function like the sine can cause overfitting (like we saw in the polynomial basis case of $M=9$ on the curve fitting data set).  Also, as alluded to, using a sine basis would force our data to oscillate, which may not be a good choice if our data doesn't have that shape.  Examples include $x^3$, which has a saddle point and does not oscillate, or something with an exponential growth (like $e^x$)
 
 \section{Ridge Regression} 
 
