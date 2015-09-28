@@ -25,13 +25,33 @@ class testGradDesc(unittest.TestCase):
 
 	def test_grad_SEE(self):
 		data_file = 'curvefitting.txt'
-		order = 3
-		[X, Y] = hw1.getData(data_file)
-		phi = hw1.designMatrix(X, order)
-		weights = hw1.regressionFit(X, Y, phi)
-		delta = .001
-		print hw1.computeSEEGrad(X,Y, weights, order)
-		print gd.gradient_approx_SEE(X, Y, weights, order, delta)
+		for order in xrange(10):
+			[X, Y] = hw1.getData(data_file)
+			phi = hw1.designMatrix(X, order)
+			weights = hw1.regressionFit(X, Y, phi)
+			delta = 1
+			analytic = hw1.computeSEEGrad(X,Y, weights, order).flatten()
+			approx = gd.gradient_approx_SEE(X, Y, weights, order, delta).flatten()
+			for i in xrange(order):	
+				self.assertAlmostEqual(analytic[i], approx[i])
+
+			delta2 = .1
+			analytic2 = hw1.computeSEEGrad(X,Y, weights, order).flatten()
+			approx2 = gd.gradient_approx_SEE(X, Y, weights, order, delta2).flatten()
+			for i in xrange(order):	
+				self.assertAlmostEqual(analytic2[i], approx2[i])
+
+			delta3 = .01
+			analytic3 = hw1.computeSEEGrad(X,Y, weights, order).flatten()
+			approx3 = gd.gradient_approx_SEE(X, Y, weights, order, delta3).flatten()
+			for i in xrange(order):	
+				self.assertAlmostEqual(analytic3[i], approx3[i])
+
+			delta4 = .001
+			analytic4 = hw1.computeSEEGrad(X,Y, weights, order).flatten()
+			approx4 = gd.gradient_approx_SEE(X, Y, weights, order, delta4).flatten()
+			for i in xrange(order):	
+				self.assertAlmostEqual(analytic4[i], approx4[i])
 
 	def test_gaussian(self):
 		return 0

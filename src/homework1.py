@@ -65,15 +65,40 @@ def regressionFit(X, Y, phi):
 def computeSSE(X,Y,weights,order):
     """Compute the Sum of Square Error function given a dataset (X,Y)"""
     """a weight vector and the order of the polynomial basis functions"""
+<<<<<<< HEAD
+    phi_matrix=designMatrix(X,order)
+    (n,m)=weights.shape
+    if(m==0):
+        weights = np.array(weights).reshape([n,1])
+    #(n,_) = Y.shape
+    #SEE_new = 0
+    #wT = np.array(weights).reshape([(order+1)]).flatten()
+    #for i in xrange(n):
+    #    phi = phi_matrix[i]
+    #    print "IN THE SUB", (Y[i] - np.dot(wT,phi))
+    #    SEE_new += (0.5)*((Y[i] - np.dot(wT, phi))**2)
+    SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi_matrix.transpose())).T)))
+    #SEE_with_dot = (0.5)*np.sum(np.square(Y-((weights.T.dot(phi)))))
+    #print "NEW RESULT", SEE_new
+    #print "OLD RESULT", SSE    
+=======
     phi=designMatrix(X,order)
     SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
     #SSE_with_dot = (0.5)*np.sum(np.square(Y-((weights.T.dot(phi)))))
+>>>>>>> origin/Derivative
     return SSE
 
 def computeSSEGrad(X,Y, weights, order):
     """ Compute the gradient of the SSE function given a dataset (X,Y) """
     """ the weight vector and the order of the polynomial base functions """
     phi=designMatrix(X,order)
+<<<<<<< HEAD
+    n = len(weights)
+    w = np.array(weights).reshape([n,1])
+    SEEGrad = (w.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
+    #SEEGrad_with_dot = ((weights.T).dot(phi) - (Y.T)).dot(phi)
+    return np.array(SEEGrad).flatten()
+=======
     SSEGrad = (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
     # SSEGrad_with_dot = ((weights.T).dot(phi.T) - (Y.T)).dot(phi)
     return SSEGrad
@@ -91,6 +116,7 @@ def computeNumSSEGrad(X,Y, weights, order, h):
         SSE_whl= computeSSE(X,Y,weights-0.5*h*null_vector,order)
         numGrad[n]=(SSE_whr- SSE_whl)/h
     return numGrad
+>>>>>>> origin/Derivative
 
 def ridge_regression(phi_matrix, l, Y):
     """ Returns theta_hat, MLE of theta """

@@ -4,7 +4,7 @@ import sympy
 from sympy.parsing.sympy_parser import parse_expr
 
 class gradDesc():
-	def __init__(self, x0, step_size, eps, params, function,
+	def __init__(self, x0, step_size, eps, 
 		verbose=False, data_file = 'curvefitting.txt', order=0):
 		""" Specify the initial guess, the step size and the convergence criterion"""
 		""" Verbose prints debug messages for checking functions and things """
@@ -53,6 +53,8 @@ class gradDesc():
 			num_steps+=1
 			if self.verbose:
 				print "step ", num_steps, " old ", old, " new ", new
+			#if num_steps >= 10:
+			#	break
 		return new
 
 	def step(self, old):
@@ -63,8 +65,13 @@ class gradDesc():
 
 	def SSE_step(self, old):
 		if self.verbose:
+<<<<<<< HEAD
+			print old.shape
+			print "     GRADIENT FOR STEP ",  hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+=======
 			print "     GRADIENT FOR STEP ",  hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
 		a = hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+>>>>>>> origin/Derivative
 		new = old - self.step_size * hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
 		return new
 
@@ -73,12 +80,11 @@ def gradient_approx_SSE(X, Y, weights, order, h):
 	n = len(weights)
 	diff = np.zeros([n,1])
 	weight = weights.flatten()
-	print "TEST", weight.shape
 	for i in xrange(n):
 		delta_vec = np.zeros([n,1])
 		delta_vec[i] = .5*h
-		diff[i] = (1.0/h) * (f(X, Y, weights+delta_vec, order) - f(X, Y, weights-delta_vec, order))
-	return diff
+		diff[i] = (1.0/h) * (f(X, Y, (weights+delta_vec), order) - f(X, Y, (weights-delta_vec), order))
+	return diff.flatten()
 
 def f(X, Y, weights, order):
 	""" define this yourself """
@@ -93,9 +99,10 @@ def conv_criteria(current, previous, eps):
 		return False	
 
 if __name__ == '__main__':
-	M = 1
-	x = np.zeros(M+1)
-	des_obj = gradDesc(x, 1, .00001, True, 'curvefitting.txt', M)
+	M = 3
+	#x = np.ones(M+1)
+	x = np.array([.3, 8, -20, 17])
+	des_obj = gradDesc(x, .2, .01, True, 'curvefitting.txt', M)
 	answer = des_obj.grad_descent(True)
 	print "Found root at ", answer
     
