@@ -5,23 +5,23 @@ import homework1 as hw1
 
 class testGradDesc(unittest.TestCase):
 
-	def test_init(self):
-		obj = gd.gradDesc(1, 1, .01, 'X', 'X**2', False, 'curvefitting.txt', 0)
+	# def test_init(self):
+	# 	obj = gd.gradDesc(1, 1, .01, 'X', 'X**2', False, 'curvefitting.txt', 0)
 
-	def test_F(self):
-		obj = gd.gradDesc(1, 1, .01, 'X', 'X**2', False, 'curvefitting.txt', 0)
-		X = np.array([1,2,3,4])
-		self.assertEqual(obj.F(X), 5)
+	# def test_F(self):
+	# 	obj = gd.gradDesc(1, 1, .01, 'X', 'X**2', False, 'curvefitting.txt', 0)
+	# 	X = np.array([1,2,3,4])
+	# 	self.assertEqual(obj.F(X), 5)
 
-	def test_grad(self):
-		obj = gd.gradDesc(1, 1, .01, 'X', 'X**2', False, 'curvefitting.txt', 0)
-		X = np.array([1,2,3,4])
-		h = .000001
-		true_val = obj.grad(X)
-		approx_val = obj.grad_approx(X, h)
+	# def test_grad(self):
+	# 	obj = gd.gradDesc(1, 1, .01, 'X', 'X**2', False, 'curvefitting.txt', 0)
+	# 	X = np.array([1,2,3,4])
+	# 	h = .000001
+	# 	true_val = obj.grad(X)
+	# 	approx_val = obj.grad_approx(X, h)
 	
-		self.assertAlmostEqual(approx_val[0], true_val[0])
-		self.assertAlmostEqual(approx_val[1], true_val[1])
+	# 	self.assertAlmostEqual(approx_val[0], true_val[0])
+	# 	self.assertAlmostEqual(approx_val[1], true_val[1])
 
 	def test_grad_SEE(self):
 		data_file = 'curvefitting.txt'
