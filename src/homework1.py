@@ -78,25 +78,19 @@ def computeSSEGrad(X,Y, weights, order):
     # SSEGrad_with_dot = ((weights.T).dot(phi.T) - (Y.T)).dot(phi)
     return SSEGrad
 
-def computeNumSSEGrad(X,Y, weights, order):
+def computeNumSSEGrad(X,Y, weights, order, h):
     """ Compute the gradient of the SSE function numerically given a dataset (X,Y) """
-    """ the weight vector and the order of the polynomial base functions """
-    phi=designMatrix(X,order)
-    # SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
-    # return (Finite_Diff(computeSSE(X,Y,weights,order),weights,0.5))
-
-def Finite_Diff(F, var, h):
-    '''Calculates the finite difference equivalent of the gradient of the function in X'''
-    '''using spacing h'''
-    F_x=F(var)
-    null_vector=np.zeros(var)
-    FDGrad=np.zeros(var)
-    for n in range(0, len(var)):
+    """ the weight vector and the order of the polynomial base functions with finite """
+    """ using spacing h"""
+    SSE_function=computeSSE(X, Y, weights, order)
+    null_vector=np.zeros(weights)
+    numGrad=np.zeros(weights)
+    for n in range(0, len(weights)):
         null_vector[n]=1
-        F_xhr= F(var+0.5*h*null_vector)
-        F_xhl= F( var-0.5*h*null_vector)
-        FDGrad[n]=(F_xhr- F_xhl)/h
-    return FDGrad
+        SSE_whr= computeSSE(X,Y,weights+0.5*h*null_vector)
+        SSE_whl= computeSSE(X,Y,weights-0.5*h*null_vector)
+        numGrad[n]=(SSE_whr- SSE_whl)/h
+    return numGrad
 
 def ridge_regression(phi_matrix, l, Y):
     """ Returns theta_hat, MLE of theta """
@@ -177,8 +171,9 @@ def do_SSEGrad(M):
     [X,Y] = getData('curvefitting.txt')
     Phi_matrix=designMatrix(X,M)
     weight_vector=regressionFit(X,Y,Phi_matrix)
+    print (weight_vector)
     SSEGrad=computeSSEGrad(X,Y,weight_vector,M)
-    SSEGradNum=computeNumSSEGrad(X,Y, weight_vector,M)
+    SSEGradNum=computeNumSSEGrad(X,Y, weight_vector,M, 0.5)
     print ('Gradient of SSE')
     print (SSEGrad)
     print ('Numerical Gradient')
