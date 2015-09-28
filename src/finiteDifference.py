@@ -9,7 +9,7 @@ def Finite_Diff(Fmx, X, h):
 	'''Calculates the finite difference equivalent of the gradient of the function in X'''
 	'''using spacing h'''
 	n=len(X)
-	F_x=Fmx(X)
+	# F_x=Fmx(X)
 	ones=np.ones_like(X)
 	F_xhr= Fmx(X+0.5*h*ones)
 	F_xhl= Fmx( X-0.5*h*ones)
@@ -35,7 +35,7 @@ def numGradDescent(F,Fmx, X_0, step, threshold, spacing, iterations=0):
 	if (F_X0-F_X1)<threshold:
 		print ('Descent terminated\nCurrent function value: ', end='')
 		print (F_X1)
-		print ('Iterations: '+str(iterations+1)+'\nFunction evaluations: '+str((iterations+1)*2))
+		print ('Iterations: '+str(iterations+1)+'\nFunction evaluations: '+str((iterations+1)*4))
 		print ('Last Grad: ', end='')
 		print (gradF_X0)
 		return (F_X1)
@@ -47,3 +47,5 @@ if __name__ == '__main__':
 	print (Finite_Diff(QuadBowl,X,0.5))
 	print (fmin_bfgs(sumQuadBowl, X))
 	numGradDescent(sumQuadBowl,QuadBowl ,X, 0.25,0.0001, 0.5)
+
+

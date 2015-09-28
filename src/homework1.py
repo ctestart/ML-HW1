@@ -83,12 +83,12 @@ def computeNumSSEGrad(X,Y, weights, order, h):
     """ the weight vector and the order of the polynomial base functions with finite """
     """ using spacing h"""
     SSE_function=computeSSE(X, Y, weights, order)
-    null_vector=np.zeros(weights)
-    numGrad=np.zeros(weights)
+    null_vector=np.zeros_like(weights)
+    numGrad=np.zeros_like(weights)
     for n in range(0, len(weights)):
         null_vector[n]=1
-        SSE_whr= computeSSE(X,Y,weights+0.5*h*null_vector)
-        SSE_whl= computeSSE(X,Y,weights-0.5*h*null_vector)
+        SSE_whr= computeSSE(X,Y,weights+0.5*h*null_vector,order)
+        SSE_whl= computeSSE(X,Y,weights-0.5*h*null_vector,order)
         numGrad[n]=(SSE_whr- SSE_whl)/h
     return numGrad
 
@@ -167,11 +167,12 @@ def do_SSE(M):
     print ('Sum of Square Error')
     print (SSE)
 
-def do_SSEGrad(M):
+def do_SSEGrads(M,h):
+    """ M is the order of the polynomial base function and h the spacing for the """
+    """ numerical gradient calculation"""
     [X,Y] = getData('curvefitting.txt')
     Phi_matrix=designMatrix(X,M)
     weight_vector=regressionFit(X,Y,Phi_matrix)
-    print (weight_vector)
     SSEGrad=computeSSEGrad(X,Y,weight_vector,M)
     SSEGradNum=computeNumSSEGrad(X,Y, weight_vector,M, 0.5)
     print ('Gradient of SSE')
@@ -180,10 +181,11 @@ def do_SSEGrad(M):
     print (SSEGradNum)
 
 if __name__ == '__main__':
-    M = 9
+    M = 3
     do_regression(M)
     do_SSE(M)
-    do_SSEGrad(M)
+    spacing=0.025
+    do_SSEGrads(M,spacing)
 
     #print ridge_regression(Phi_matrix, 1, Y)
 
