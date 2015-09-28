@@ -36,18 +36,18 @@ class gradDesc():
 			fin_dif[i] = approx
 		return fin_dif
 
-	def grad_descent(self, SEE=False):
+	def grad_descent(self, SSE=False):
 		""" Run gradient descent on a scalar function """
 		old = self.first
-		if SEE:
-			new = self.SEE_step(old)
+		if SSE:
+			new = self.SSE_step(old)
 		else:
 			new = self.step(old)
 		num_steps = 0 								# To keep track of how many iterations
 		while(not conv_criteria(old, new, self.eps)):
 			old = new
-			if SEE:
-				new = self.SEE_step(old)
+			if SSE:
+				new = self.SSE_step(old)
 			else:
 				new = self.step(old)
 			num_steps+=1
@@ -61,14 +61,14 @@ class gradDesc():
 		new = old - self.step_size * self.grad(old)
 		return new
 
-	def SEE_step(self, old):
+	def SSE_step(self, old):
 		if self.verbose:
-			print "     GRADIENT FOR STEP ",  hw1.computeSEEGrad(self.X, self.Y, old, self.order).T
-		a = hw1.computeSEEGrad(self.X, self.Y, old, self.order).T
-		new = old - self.step_size * hw1.computeSEEGrad(self.X, self.Y, old, self.order).T
+			print "     GRADIENT FOR STEP ",  hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+		a = hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+		new = old - self.step_size * hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
 		return new
 
-def gradient_approx_SEE(X, Y, weights, order, h):
+def gradient_approx_SSE(X, Y, weights, order, h):
 	""" Calculates the gradient using finite differences """
 	n = len(weights)
 	diff = np.zeros([n,1])
@@ -82,7 +82,7 @@ def gradient_approx_SEE(X, Y, weights, order, h):
 
 def f(X, Y, weights, order):
 	""" define this yourself """
-	return hw1.computeSEE(X, Y, weights, order)
+	return hw1.computeSSE(X, Y, weights, order)
 
 def conv_criteria(current, previous, eps):
 	""" Determines whether the algorithm has converged by the two-norm """

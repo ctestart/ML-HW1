@@ -12,7 +12,7 @@ from numpy.linalg import inv, norm
 # Y is a Nx1 column vector of data values
 # order is the order of the highest order polynomial in the basis functions
 def regressionPlot(X, Y, order):
-    pl.plot(X.T.tolist()[0],Y.T.tolist()[0], 'gs')
+    pl.plot(X.T.tolist()[0],Y.T.tolist()[0], 'gp')
 
     # You will need to write the designMatrix and regressionFit function
 
@@ -62,21 +62,41 @@ def regressionFit(X, Y, phi):
     phiT = phi.transpose()
     return (np.matrix(phiT)* np.matrix(phi)).getI() * np.matrix(phiT) * Y
 
-def computeSEE(X,Y,weights,order):
+def computeSSE(X,Y,weights,order):
     """Compute the Sum of Square Error function given a dataset (X,Y)"""
     """a weight vector and the order of the polynomial basis functions"""
     phi=designMatrix(X,order)
     SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
-    #SEE_with_dot = (0.5)*np.sum(np.square(Y-((weights.T.dot(phi)))))
+    #SSE_with_dot = (0.5)*np.sum(np.square(Y-((weights.T.dot(phi)))))
     return SSE
 
-def computeSEEGrad(X,Y, weights, order):
-    """ Compute the gradient of the SEE function given a dataset (X,Y) """
+def computeSSEGrad(X,Y, weights, order):
+    """ Compute the gradient of the SSE function given a dataset (X,Y) """
     """ the weight vector and the order of the polynomial base functions """
     phi=designMatrix(X,order)
-    SEEGrad = (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
-    SEEGrad_with_dot = ((weights.T).dot(phi.T) - (Y.T)).dot(phi)
-    return SEEGrad
+    SSEGrad = (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
+    # SSEGrad_with_dot = ((weights.T).dot(phi.T) - (Y.T)).dot(phi)
+    return SSEGrad
+
+def computeNumSSEGrad(X,Y, weights, order):
+    """ Compute the gradient of the SSE function numerically given a dataset (X,Y) """
+    """ the weight vector and the order of the polynomial base functions """
+    phi=designMatrix(X,order)
+    # SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
+    # return (Finite_Diff(computeSSE(X,Y,weights,order),weights,0.5))
+
+def Finite_Diff(F, var, h):
+    '''Calculates the finite difference equivalent of the gradient of the function in X'''
+    '''using spacing h'''
+    F_x=F(var)
+    null_vector=np.zeros(var)
+    FDGrad=np.zeros(var)
+    for n in range(0, len(var)):
+        null_vector[n]=1
+        F_xhr= F(var+0.5*h*null_vector)
+        F_xhl= F( var-0.5*h*null_vector)
+        FDGrad[n]=(F_xhr- F_xhl)/h
+    return FDGrad
 
 def ridge_regression(phi_matrix, l, Y):
     """ Returns theta_hat, MLE of theta """
@@ -142,18 +162,33 @@ def model_selection():
 def do_regression(M):
     [X,Y] = getData('curvefitting.txt')
     regressionPlot(X, Y, M)
+    # Phi_matrix=designMatrix(X,M)
+    # regressionFit(X,Y,Phi_matrix)
+
+def do_SSE(M):
+    [X,Y] = getData('curvefitting.txt')
     Phi_matrix=designMatrix(X,M)
-    regressionFit(X,Y,Phi_matrix)
+    weight_vector=regressionFit(X,Y,Phi_matrix)
+    SSE=computeSSE(X,Y,weight_vector,M)
+    print ('Sum of Square Error')
+    print (SSE)
+
+def do_SSEGrad(M):
+    [X,Y] = getData('curvefitting.txt')
+    Phi_matrix=designMatrix(X,M)
+    weight_vector=regressionFit(X,Y,Phi_matrix)
+    SSEGrad=computeSSEGrad(X,Y,weight_vector,M)
+    SSEGradNum=computeNumSSEGrad(X,Y, weight_vector,M)
+    print ('Gradient of SSE')
+    print (SSEGrad)
+    print ('Numerical Gradient')
+    print (SSEGradNum)
 
 if __name__ == '__main__':
     M = 9
-    do_regression(9)
-    #SSE=computeSEE(X,Y,weight_vector,9)
-    #print ('Sum of Square Error')
-    #print (SSE)
-    #print ('Gradient of SSE')
-    #SSEG=computeSEEGrad(X,Y,weight_vector,9)
-    #print (SSEG)
+    do_regression(M)
+    do_SSE(M)
+    do_SSEGrad(M)
 
     #print ridge_regression(Phi_matrix, 1, Y)
 
