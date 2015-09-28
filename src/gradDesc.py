@@ -65,8 +65,13 @@ class gradDesc():
 
 	def SSE_step(self, old):
 		if self.verbose:
+<<<<<<< HEAD
 			print old.shape
 			print "     GRADIENT FOR STEP ",  hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+=======
+			print "     GRADIENT FOR STEP ",  hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+		a = hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+>>>>>>> origin/Derivative
 		new = old - self.step_size * hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
 		return new
 
