@@ -9,7 +9,6 @@ def Finite_Diff(Fmx, X, h):
 	'''Calculates the finite difference equivalent of the gradient of the function in X'''
 	'''using spacing h'''
 	n=len(X)
-	# F_x=Fmx(X)
 	ones=np.ones_like(X)
 	F_xhr= Fmx(X+0.5*h*ones)
 	F_xhl= Fmx( X-0.5*h*ones)
