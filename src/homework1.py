@@ -65,18 +65,32 @@ def regressionFit(X, Y, phi):
 def computeSEE(X,Y,weights,order):
     """Compute the Sum of Square Error function given a dataset (X,Y)"""
     """a weight vector and the order of the polynomial basis functions"""
-    phi=designMatrix(X,order)
-    SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi.transpose())).T)))
+    phi_matrix=designMatrix(X,order)
+    (n,m)=weights.shape
+    if(m==0):
+        weights = np.array(weights).reshape([n,1])
+    #(n,_) = Y.shape
+    #SEE_new = 0
+    #wT = np.array(weights).reshape([(order+1)]).flatten()
+    #for i in xrange(n):
+    #    phi = phi_matrix[i]
+    #    print "IN THE SUB", (Y[i] - np.dot(wT,phi))
+    #    SEE_new += (0.5)*((Y[i] - np.dot(wT, phi))**2)
+    SSE=(0.5) * np.sum(np.square(Y-((weights.T*np.matrix(phi_matrix.transpose())).T)))
     #SEE_with_dot = (0.5)*np.sum(np.square(Y-((weights.T.dot(phi)))))
+    #print "NEW RESULT", SEE_new
+    #print "OLD RESULT", SSE    
     return SSE
 
 def computeSEEGrad(X,Y, weights, order):
     """ Compute the gradient of the SEE function given a dataset (X,Y) """
     """ the weight vector and the order of the polynomial base functions """
     phi=designMatrix(X,order)
-    SEEGrad = (weights.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
-    SEEGrad_with_dot = ((weights.T).dot(phi.T) - (Y.T)).dot(phi)
-    return SEEGrad
+    n = len(weights)
+    w = np.array(weights).reshape([n,1])
+    SEEGrad = (w.T*np.matrix(phi.transpose())-Y.T)*np.matrix(phi)
+    #SEEGrad_with_dot = ((weights.T).dot(phi) - (Y.T)).dot(phi)
+    return np.array(SEEGrad).flatten()
 
 def ridge_regression(phi_matrix, l, Y):
     """ Returns theta_hat, MLE of theta """

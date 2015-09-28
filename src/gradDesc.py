@@ -4,7 +4,7 @@ import sympy
 from sympy.parsing.sympy_parser import parse_expr
 
 class gradDesc():
-	def __init__(self, x0, step_size, eps, params, function,
+	def __init__(self, x0, step_size, eps, 
 		verbose=False, data_file = 'curvefitting.txt', order=0):
 		""" Specify the initial guess, the step size and the convergence criterion"""
 		""" Verbose prints debug messages for checking functions and things """
@@ -36,23 +36,25 @@ class gradDesc():
 			fin_dif[i] = approx
 		return fin_dif
 
-	def grad_descent(self, SEE=False):
+	def grad_descent(self, SSE=False):
 		""" Run gradient descent on a scalar function """
 		old = self.first
-		if SEE:
-			new = self.SEE_step(old)
+		if SSE:
+			new = self.SSE_step(old)
 		else:
 			new = self.step(old)
 		num_steps = 0 								# To keep track of how many iterations
 		while(not conv_criteria(old, new, self.eps)):
 			old = new
-			if SEE:
-				new = self.SEE_step(old)
+			if SSE:
+				new = self.SSE_step(old)
 			else:
 				new = self.step(old)
 			num_steps+=1
 			if self.verbose:
 				print "step ", num_steps, " old ", old, " new ", new
+			#if num_steps >= 10:
+			#	break
 		return new
 
 	def step(self, old):
@@ -61,28 +63,27 @@ class gradDesc():
 		new = old - self.step_size * self.grad(old)
 		return new
 
-	def SEE_step(self, old):
+	def SSE_step(self, old):
 		if self.verbose:
-			print "     GRADIENT FOR STEP ",  hw1.computeSEEGrad(self.X, self.Y, old, self.order).T
-		a = hw1.computeSEEGrad(self.X, self.Y, old, self.order).T
-		new = old - self.step_size * hw1.computeSEEGrad(self.X, self.Y, old, self.order).T
+			print old.shape
+			print "     GRADIENT FOR STEP ",  hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
+		new = old - self.step_size * hw1.computeSSEGrad(self.X, self.Y, old, self.order).T
 		return new
 
-def gradient_approx_SEE(X, Y, weights, order, h):
+def gradient_approx_SSE(X, Y, weights, order, h):
 	""" Calculates the gradient using finite differences """
 	n = len(weights)
 	diff = np.zeros([n,1])
 	weight = weights.flatten()
-	print "TEST", weight.shape
 	for i in xrange(n):
 		delta_vec = np.zeros([n,1])
 		delta_vec[i] = .5*h
-		diff[i] = (1.0/h) * (f(X, Y, weights+delta_vec, order) - f(X, Y, weights-delta_vec, order))
-	return diff
+		diff[i] = (1.0/h) * (f(X, Y, (weights+delta_vec), order) - f(X, Y, (weights-delta_vec), order))
+	return diff.flatten()
 
 def f(X, Y, weights, order):
 	""" define this yourself """
-	return hw1.computeSEE(X, Y, weights, order)
+	return hw1.computeSSE(X, Y, weights, order)
 
 def conv_criteria(current, previous, eps):
 	""" Determines whether the algorithm has converged by the two-norm """
@@ -93,9 +94,10 @@ def conv_criteria(current, previous, eps):
 		return False	
 
 if __name__ == '__main__':
-	M = 1
-	x = np.zeros(M+1)
-	des_obj = gradDesc(x, 1, .00001, True, 'curvefitting.txt', M)
+	M = 3
+	#x = np.ones(M+1)
+	x = np.array([.3, 8, -20, 17])
+	des_obj = gradDesc(x, .2, .01, True, 'curvefitting.txt', M)
 	answer = des_obj.grad_descent(True)
 	print "Found root at ", answer
     
