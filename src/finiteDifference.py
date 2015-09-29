@@ -47,10 +47,13 @@ def numGradDescent(F, X_0, step, threshold, spacing, iterations=0):
 	''' in X_0, using the step for next X if the threshold in no attained, evaluating '''
 	'''the gradient numerically '''
 	F_X0=F(X_0)
-	print ('F_X0='+str(F_X0))
+	print ('F('+str(X_0)+')='+str(F_X0))
 	gradF_X0=Finite_Diff(F, X_0,spacing)
-	print ('Grad')
+	gradF_manually=nonConvexFunctionGrad(X_0)
+	print ('Grad: ',end=' ')
 	print (gradF_X0)
+	print ('Manual Grad: ',end=' ')
+	print (gradF_manually)
 	X_1=np.array(X_0-step*gradF_X0)
 	F_X1=F(X_1)
 	if abs(F_X0-F_X1)<threshold:
