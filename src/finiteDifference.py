@@ -42,18 +42,20 @@ def nonConvexFunctionGrad(X):
 	return Grad
 
 
-def numGradDescent(F, X_0, step, threshold, spacing, iterations=0):
+def numGradDescent(F, X_0, step, threshold, spacing, analytical=False, iterations=0):
 	'''looks for the minimum of function F using the gradient descent method starting '''
 	''' in X_0, using the step for next X if the threshold in no attained, evaluating '''
 	'''the gradient numerically '''
 	F_X0=F(X_0)
 	print ('F('+str(X_0)+')='+str(F_X0))
-	gradF_X0=Finite_Diff(F, X_0,spacing)
-	gradF_manually=nonConvexFunctionGrad(X_0)
-	print ('Grad: ',end=' ')
-	print (gradF_X0)
-	print ('Manual Grad: ',end=' ')
-	print (gradF_manually)
+	if analytical:
+		gradF_X0=nonConvexFunctionGrad(X_0)
+		print ('Analytical Grad: ',end=' ')
+		print (gradF_X0)
+	else:
+		gradF_X0=Finite_Diff(F, X_0,spacing)
+		print ('Finite Diff Grad: ',end=' ')
+		print (gradF_X0)
 	X_1=np.array(X_0-step*gradF_X0)
 	F_X1=F(X_1)
 	if abs(F_X0-F_X1)<threshold:
@@ -64,7 +66,7 @@ def numGradDescent(F, X_0, step, threshold, spacing, iterations=0):
 		print ('Last Grad: ', end='')
 		print (gradF_X0)
 		return (F_X1)
-	return numGradDescent(F,X_1,step, threshold, spacing, (iterations+1))
+	return numGradDescent(F,X_1,step, threshold, spacing, analytical, (iterations+1))
 
 if __name__ == '__main__':
 	X=np.array([4,8])
@@ -79,14 +81,14 @@ if __name__ == '__main__':
 	# print ('Threshold: '+str(thresh)+'\t\t Spacing: '+str(sp))
 	# numGradDescent(sumQuadBowl,X,step,thresh, sp)
 	print ('\nNon-Convex Function gradient descent')
-	Y=np.array([0,1])
+	Y=np.array([0,2])
 	print (Finite_Diff(nonConvexFunction,Y,sp))
-	print ('Manually: '+str(nonConvexFunctionGrad(Y)))
+	print ('Analytical Grad: '+str(nonConvexFunctionGrad(Y)))
 	F_Y=nonConvexFunction(Y)
 	print ('X= '+str(Y)+'\t\t F(X)= '+str(F_Y))
 	print ('Initial Guess'+ str(Y)+'\t\t Step: '+str(step))
 	print ('Threshold: '+str(thresh)+'\t\t Spacing: '+str(sp))
-	numGradDescent(nonConvexFunction,Y,step,thresh, sp)
+	numGradDescent(nonConvexFunction,Y,step,thresh, sp, True)
 	
 
 
