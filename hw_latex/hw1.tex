@@ -21,6 +21,9 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
+%For tables
+\usepackage{arydshln}
+
 % As of 2011, we use the hyperref package to produce hyperlinks in the
 % resulting PDF.  If this breaks your system, please commend out the
 % following usepackage line and replace \usepackage{icml2015} with
@@ -59,6 +62,40 @@
 Algorithm \ref{alg:GradDesc} is a gradient descent procedure to minimize scalar functions of a vector argument. The convergence criterion of the procedure is a threshold $\epsilon$ such that the algorithm terminates when the difference in the objective function on successive steps, $X^t$ and $X^{t+1}$, is less than $\epsilon$.
 
 In gradient descent, the initial guess $X^0$, the step size $\eta$ and the threshold $\epsilon$ play an essential role in the convergence of the algorithm.
+
+\begin{table}[t]
+\caption{Number of iterations for convergence and final value of the objective function for different values of the step, threshold and initial guess.}
+\label{GradInitialCond}
+%\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccccc}
+\hline
+\multicolumn{5}{c}{\abovespace \belowspace Objective function : $f(X)=x_1^2+x_2^2$} \\
+\hline
+\abovespace
+
+$(x^0_1,x^0_2)$   & (4,8) &(4,8)&(4,8) & (5,11) & (5,11) \\
+$\eta$ & 2& 0.5&0.25 &0.25 &0.25 \\
+\belowspace
+$\epsilon$   & 0.001&0.001&0.001 &0.001 & $10^{-5}$ \\
+\hdashline
+\abovespace
+$Iterations$   & 32 & 2& 9&10& 13        \\
+$min (f(X))$    & $No$ $conv.$& 0.0 & $9.10^{-4}$ & $4.10^{-4}$ & $9.10^{-6}$\\
+\hline
+\belowspace
+\end{tabular}
+}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+
 Our gradient descent code is written in python and takes as parameters the initial guess, $x_0$, the step size, $\gamma$, and the convergence threshold, $\epsilon$.  The convergence criteria that we use to terminate is when the difference between successive ``guesses'' (call these $x_n$ and $x_{n+1}$ for some arbitrary $n$) is less than $\epsilon$, i.e. $|x_{n+1} -x_n | < \epsilon$.  Since we are only working with scalar functions, this will suffice.  If we were working with vector values functions, we could instead use the two-norm.  
 
 \begin{algorithm}[tb]
