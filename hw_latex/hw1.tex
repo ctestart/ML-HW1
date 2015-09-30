@@ -24,6 +24,10 @@
 %For tables
 \usepackage{arydshln}
 
+%For Math
+\usepackage{amsmath}
+\usepackage{bbm}
+
 % As of 2011, we use the hyperref package to produce hyperlinks in the
 % resulting PDF.  If this breaks your system, please commend out the
 % following usepackage line and replace \usepackage{icml2015} with
@@ -59,13 +63,82 @@
 
 \section{Implement Gradient Descent}
 
-Algorithm \ref{alg:GradDesc} is a gradient descent procedure to minimize scalar functions of a vector argument. The convergence criterion of the procedure is a threshold $\epsilon$ such that the algorithm terminates when the difference in the objective function on successive steps, $X^t$ and $X^{t+1}$, is less than $\epsilon$.
+\begin{algorithm}[htb]
+   \caption{Gradient Descent Procedure}
+   \label{alg:GradDesc}
+\begin{algorithmic}
+   \STATE {\bfseries Input:}
+   \STATE Obj. function to minimize $f(X):R^n \rightarrow R$, 
+   \STATE initial guess  $X^0=(x^0_1,...,x^0_n)$, 
+   \STATE step size $\eta$, 
+   \STATE threshold $\epsilon$.
+   \STATE {\bfseries Initialization:} $X^t=X^0$
+   \REPEAT
+   \STATE Compute  $f(X^t)$ and $\nabla f(X^t)$.
+   \STATE Compute $X^{t+1}=X^t-\eta \nabla f(X^t)$
+   \STATE $X^t=X^{t+1}$
+   \UNTIL $\left| f(X^{t})-f(X^{t+1})\right|<\epsilon$
+\end{algorithmic}
+\end{algorithm}
 
-In gradient descent, the initial guess $X^0$, the step size $\eta$ and the threshold $\epsilon$ play an essential role in the convergence of the algorithm.
+Algorithm \ref{alg:GradDesc} is a gradient descent procedure to minimize scalar functions of a vector argument. The convergence criterion of the procedure is a threshold $\epsilon$ such that the algorithm terminates when the difference in the objective function on successive steps, $X^t$ and $X^{t+1}$, is less than $\epsilon$. Table \ref{TableGradDesc} shows two tests of the Gradient Descent procedure: on the quadratic bowl function (left) and on a non-convex function (right). The graphics of both function are depicted in Figure \ref{3D2Dgraphs} (a) and (c). Figure \ref{3D2Dgraphs} (b) and (d) has the level set of $z$ for small values of $x$ and $y$. Calculating the minimum using the gradient descent from the point $(8,8)$, with a step $\eta=0.25$, the procedure converges in 2 iterations to the minimum of the quadratic bowl function. And starting from $(0,1)$ with a step $\eta=0.5$, the procedure takes only one step to converge with the non-convex function. However, in this case the procedure converged to the local minimum $(0,0)$ and not the global minimum (near $(1.408,0)$) of the function. Indeed for, for most starting points with $x<0$, the gradient descent will converge to the local minimum instead of the global minimum.
+ 
+\begin{table}[ht]
+\caption{Analytical gradient descent of a convex function (left) and a non-convex function (right).}
+\label{TableGradDesc}
+%\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{ccccc}
+\hline
+\abovespace \belowspace $f(X)=$ &
+\multicolumn{2}{c}{\abovespace \belowspace $x_1^2+x_2^2$} & 
+\multicolumn{2}{c}{\abovespace \belowspace $3x^4-8x^3+5x^2+y^2$ }\\
+\hline
+\abovespace
+$\eta$ & 
+\multicolumn{2}{c}{$0.25$} & 
+\multicolumn{2}{c}{$0.5$ } \\
+$\epsilon$ & \multicolumn{2}{c}{$0.1$} & \multicolumn{2}{c}{$0.1$ } \\
+$\nabla f(X)=$ & \multicolumn{2}{c}{$\begin{bmatrix} 2x \\ 2y \end{bmatrix}$} & \multicolumn{2}{c}{$\begin{bmatrix} 12x^3-24x^2+10x \\2y \end{bmatrix}$ } \\
+& & && \\
+\hdashline
+\abovespace
+$Iterations$   & $X$ &$F(X)$ & $X$ &F(X)        \\
+$0$    & $(8,8)$ & 128 & $(0,1)$ &1 \\
+$1$    & $(4,4)$ & 32 & $(0,0)$ &0 \\
+\belowspace
+$2$    & $(0,0)$ & 0 & - & - \\
+\hline
+\belowspace
+\end{tabular}
+}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
 
 
+\begin{figure}[htb]
+\begin{center}
+\centerline{
+\subfigure[Quadratic bowl in 3D]{\includegraphics[scale=0.65]{QuadBowl3D.png}}\quad
+  \subfigure[Quadratic bowl in 2D]{\includegraphics[scale=0.65]{QuadBowl2D.png}}}
+  \centerline{
+    \subfigure[Non-convex function in 3D]{\includegraphics[scale=0.65]{NonConvex3D.png}} \quad
+    \subfigure[Non-convex function in 2D]{\includegraphics[scale=0.65]{NonConvex2D.png}}
+  }
+\caption{(a) and (b) are 3D and 2D graphics of a convex function with only one local and overall minumum. (c) and (d) are 3D and 2D graphics of a non-convex function with at least 2 local minima.}
+\label{3D2Dgraphs}
+\end{center}
+\end{figure}
 
-\begin{table}[t]
+In gradient descent, the initial guess $X^0$, the step size $\eta$ and the threshold $\epsilon$ play an essential role in the convergence of the algorithm. Table \ref{GradInitialCond} shows the number of iterations of the procedure to converge and the value of the function at the final step. A very small threshold $\epsilon$ will make the final value of the function at the minimum more accurate, but the procedure will require more iterations to converge, as the last to column on the right. Equally important, a small step $\eta$ will also require more iterations to converge. In the example, the number of iterations jumps from 2 to 9 when the step size $\eta$ is reduced by half. However, a large value of $\eta$ can prevent the procedure of convergence by making the algorithm `jump' from one side to the other of the minimum, which is what the first column of the table shows. Finally, picking a bad initial guess will not only impact the performance of the algorithm (column 3 and 4 of Table \ref{GradInitialCond}) but it can also lead it to find a local minimum, as seen in the example of Table \ref{TableGradDesc} (rignt). 
+
+\begin{table}[hb]
 \caption{Number of iterations for convergence and final value of the objective function for different values of the step, threshold and initial guess.}
 \label{GradInitialCond}
 %\vskip 0.15in
@@ -86,7 +159,7 @@ $\epsilon$   & 0.001&0.001&0.001 &0.001 & $10^{-5}$ \\
 \hdashline
 \abovespace
 $Iterations$   & 32 & 2& 9&10& 13        \\
-$min (f(X))$    & $No$ $conv.$& 0.0 & $9.10^{-4}$ & $4.10^{-4}$ & $9.10^{-6}$\\
+$min (f(X))$    & $No$ $conv.$& 0.0 & $3.10^{-4}$ & $10^{-4}$ & $2.10^{-6}$\\
 \hline
 \belowspace
 \end{tabular}
@@ -97,26 +170,14 @@ $min (f(X))$    & $No$ $conv.$& 0.0 & $9.10^{-4}$ & $4.10^{-4}$ & $9.10^{-6}$\\
 \vskip -0.1in
 \end{table}
 
+The gradient of a function at a given point can be numerically approximated using the \textit{Finite Difference} method. The central differences approximate the $n^{\text {th}}$ element of the gradient of a function $f(X):R^n\rightarrow R$ by:
+\small
+\begin{equation}
+\nabla_h f_n(X)=\frac{f(X+1/2*h*\mathbbm{1})-f(X+1/2*h*\mathbbm{1})}{h}
+\end{equation}
+\normalsize
 
 Our gradient descent code is written in python and takes as parameters the initial guess, $x_0$, the step size, $\gamma$, and the convergence threshold, $\epsilon$.  The convergence criteria that we use to terminate is when the difference between successive ``guesses'' (call these $x_n$ and $x_{n+1}$ for some arbitrary $n$) is less than $\epsilon$, i.e. $|x_{n+1} -x_n | < \epsilon$.  Since we are only working with scalar functions, this will suffice.  If we were working with vector values functions, we could instead use the two-norm.  
-
-\begin{algorithm}[tb]
-   \caption{Gradient Descent Procedure}
-   \label{alg:GradDesc}
-\begin{algorithmic}
-   \STATE {\bfseries Input:}
-   \STATE Obj. function to minimize $f(X):R^n \rightarrow R$, 
-   \STATE initial guess  $X^0=(x^0_1,...,x^0_n)$, 
-   \STATE step size $\eta$, 
-   \STATE threshold $\epsilon$.
-   \STATE {\bfseries Initialization:} $X^t=X^0$
-   \REPEAT
-   \STATE Compute  $f(X^t)$ and $\nabla f(X^t)$.
-   \STATE Compute $X^{t+1}=X^t-\eta \nabla f(X^t)$
-   \STATE $X^t=X^{t+1}$
-   \UNTIL $\left| f(X^{t})-f(X^{t+1})\right|<\epsilon$
-\end{algorithmic}
-\end{algorithm}
 
 In order to test our gradient descent, we experimented with a few different functions.  We used a quadratic function: $f(X) = \sum_{i=1}^n x_i^2$, the Rosenbrock function: $f(x_1,x_2) = (1-x_1)^2+100(x_2-x_1^2)^2$ (as referenced in the Wikipedia page for gradient descent), and a few non convex functions to test gradient descent with multiple minima.  
 
