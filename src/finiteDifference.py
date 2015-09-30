@@ -2,6 +2,7 @@ from __future__ import print_function
 import numpy as np
 import homework1 as hw1
 import sympy
+import math
 from scipy.optimize import fmin_bfgs
 
 
@@ -80,17 +81,26 @@ def numGradDescent(F, X_0, step, threshold, spacing, analytical=False, QuadBowl=
 	return numGradDescent(F,X_1,step, threshold, spacing, analytical,QuadBowl, (iterations+1))
 
 if __name__ == '__main__':
-	X=np.array([4,8])
+	X=np.array([0.0,0.0])
 	step= 0.25
 	thresh=0.001
 	sp=0.5
 	# print (sumQuadBowl(X))
-	# print (Finite_Diff(sumQuadBowl,X,0.5))
+	print ('Calculating the gradient of Quad Bowl in '+str(X))
+	print ('Finite difference with spacing '+str(sp))
+	print (Finite_Diff(sumQuadBowl,X,sp))
+	print ('Anaytical Gradient:')
+	print (sumQuadBowlGrad(X))
+	print ('\nCalculating the gradient of non-convex function in '+str(X))
+	print ('Finite difference with spacing '+str(sp))
+	print (Finite_Diff(nonConvexFunction,X,sp))
+	print ('Anaytical Gradient:')
+	print (nonConvexFunctionGrad(X))
 	# print (fmin_bfgs(sumQuadBowl, X))
-	print ('\nQuad Bowl Gradient Descent')
-	print ('Initial Guess'+ str(X)+'\t\t Step: '+str(step))
-	print ('Threshold: '+str(thresh)+'\t\t Spacing: '+str(sp))
-	numGradDescent(sumQuadBowl,X,step,thresh, sp, True, True)
+	# print ('\nQuad Bowl Gradient Descent')
+	# print ('Initial Guess'+ str(X)+'\t\t Step: '+str(step))
+	# print ('Threshold: '+str(thresh)+'\t\t Spacing: '+str(sp))
+	# numGradDescent(sumQuadBowl,X,step,thresh, sp, True, True)
 	# print ('\nNon-Convex Function gradient descent')
 	# Y=np.array([0,2])
 	# print (Finite_Diff(nonConvexFunction,Y,sp))
