@@ -170,12 +170,45 @@ $min (f(X))$    & $No$ $conv.$& 0.0 & $3.10^{-4}$ & $10^{-4}$ & $2.10^{-6}$\\
 \vskip -0.1in
 \end{table}
 
-The gradient of a function at a given point can be numerically approximated using the \textit{Finite Difference} method. The central differences approximate the $n^{\text {th}}$ element of the gradient of a function $f(X):R^n\rightarrow R$ by:
+The gradient of a function at a given point can be numerically approximated using the \textit{Finite Difference} method. The central differences approximate the $n^{\text {th}}$ element of the gradient of a function $f(X):R^n\rightarrow R$ ~by:
 \small
 \begin{equation}
-\nabla_h f_n(X)=\frac{f(X+1/2*h*\mathbbm{1})-f(X+1/2*h*\mathbbm{1})}{h}
+\nabla_h f_n(X)=\frac{f(X+1/2*h*\mathbbm{1}_n)-f(X+1/2*h*\mathbbm{1}_n)}{h}
 \end{equation}
 \normalsize
+
+\begin{table}[ht]
+\caption{Finite difference method numerical gradient v. analytical gradient for various point of the quadratic bowl function and a non-convex function for $h=0.5$.}
+\label{TableFinDiff}
+%\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{ccccc}
+\hline
+\abovespace \belowspace $f(X)=$ &
+\multicolumn{2}{c}{\abovespace \belowspace $x_1^2+x_2^2$} & 
+\multicolumn{2}{c}{\abovespace \belowspace $3x^4-8x^3+5x^2+y^2$ }\\
+\hline
+\abovespace
+$(x_1,x_2)$& Diff & Analytical &Fin. Diff & Analytical \\
+\abovespace
+$(0,0)$   & $(0,0)$ &$(0,0)$  & $(0,0)$  &$(0,0)$     \\
+$(0,0)$   & $(8,8)$ & $(0,0)$  & $(0,1)$ &$(0,0)$  \\
+$(0,0)$   & $(4,4)$ &$(0,0)$ & $(0,0)$ &$(0,0)$  \\
+\belowspace
+$(0,0)$     & $(0,0)$ & $(0,0)$  & $(0,0)$  & $(0,0)$  \\
+\hline
+\belowspace
+\end{tabular}
+}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
 
 Our gradient descent code is written in python and takes as parameters the initial guess, $x_0$, the step size, $\gamma$, and the convergence threshold, $\epsilon$.  The convergence criteria that we use to terminate is when the difference between successive ``guesses'' (call these $x_n$ and $x_{n+1}$ for some arbitrary $n$) is less than $\epsilon$, i.e. $|x_{n+1} -x_n | < \epsilon$.  Since we are only working with scalar functions, this will suffice.  If we were working with vector values functions, we could instead use the two-norm.  
 
